@@ -1,31 +1,17 @@
-import { AppConfigurationModule } from './infrastructure/configuration/app-configuration.module';
-import { AppConfigurationService } from './infrastructure/configuration/app-configuration.service';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { Module } from '@nestjs/common';
-import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
+import { Module } from "@nestjs/common"
+import { MongooseModule } from "@nestjs/mongoose"
+import { AppController } from "./app.controller"
+import { AppService } from "./app.service"
+import { AuthModule } from "./auth/auth.module"
+import { UsersModule } from "./users/users.module"
 
 @Module({
   imports: [
-    ConfigModule,AppConfigurationModule,UsersModule, AuthModule,
-    MongooseModule.forRootAsync({
-      imports: [AppConfigurationModule],
-      inject: [AppConfigurationService],
-      useFactory: (appConfigService: AppConfigurationService) => {
-        const options: MongooseModuleOptions = {
-          uri: appConfigService.connectionString,
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        };
-        return options;
-      },
-    })
+    UsersModule, AuthModule,MongooseModule.forRoot(
+     "mongodb+srv://lot32:hmWOHahU0uVj5FQz@cluster0.lpniexn.mongodb.net/?retryWrites=true&w=majority"
+    ),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-
