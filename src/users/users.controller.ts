@@ -38,10 +38,16 @@ export class UsersController {
     return {User: req.user,
             msg: 'User logged in'};
   }
-  //Get / protected
+   //Get / protected
   @UseGuards(AuthenticatedGuard)
   @Get('/protected')
   getHello(@Request() req): string {
     return req.user;
   }
+   //Get / logout
+  @Get('/logout')
+    logout(@Request() req): any {
+      req.session.destroy();
+      return { msg: 'The user session has ended' }
+    }
 }
