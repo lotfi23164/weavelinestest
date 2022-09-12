@@ -1,30 +1,30 @@
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { InjectModel } from "@nestjs/mongoose";
 import { Todo } from "./todo.entity";
 import { CreateTodoDto } from "../dto/create-todo.dto";
 import { UpdateTodoDto } from "../dto/update-todo.dto";
+import { Model } from "mongoose";
 
 export class TodosService {
   constructor(
-    @InjectRepository(Todo)
-    private readonly todoRepository: Repository<Todo>
+    @InjectModel('Todo')
+    private readonly todoRepository: Model<Todo>
   ) { }
 
   // CRUD
   create(todo: CreateTodoDto) {
-    return this.todoRepository.save(todo);
+    return this.todoRepository.create(todo);
   }
 
   getAll() {
     return this.todoRepository.find({});
   }
 
-  update(todo: UpdateTodoDto) {
-    return this.todoRepository.save(todo);
-  }
+  // updateMany(todo: UpdateTodoDto) {
+  //   return this.todoRepository.updateMany(todo);
+  // }
 
   async delete(id: string) {
-    const { affected } = await this.todoRepository.delete({ id });
+    const { affected } = await this.todoRepository.remove({ id });
     return affected > 0;
   }
 }
